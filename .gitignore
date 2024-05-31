@@ -159,6 +159,8 @@ cython_debug/
 songs-old/
 Screenshots/
 songs/
+test.py
+data.json
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
