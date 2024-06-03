@@ -156,11 +156,15 @@ cython_debug/
 .vscode/
 
 # Other
-songs-old/
-Screenshots/
 songs/
+images/
 test.py
-data.json
+data/
+features_to_predict_from.json
+keys.py
+data_predict/
+songs_predict/
+test/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

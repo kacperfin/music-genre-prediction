@@ -7,7 +7,7 @@ DATASET_PATH = "songs"
 SAMPLE_RATE = 22050
 DURATION = 30 # of a single track, in seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * DURATION
-JSON_PATH = "data.json"
+JSON_PATH = "data/data.json"
 
 # dictionary to store data
 data = {
@@ -16,7 +16,7 @@ data = {
     "labels": []
 }
 
-def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048, hop_length: int=512, num_segments: int=10, song_limit_per_genre: int=None):
+def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048, hop_length: int=512, num_segments: int=5, song_limit_per_genre: int=None):
     num_samples_per_segment = SAMPLES_PER_TRACK / num_segments
     expected_num_mfcc_vectors_per_segment = math.ceil(num_samples_per_segment / hop_length)
 
@@ -29,7 +29,7 @@ def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048
         # load audio files
         for j, file in enumerate(files):
             if j == song_limit_per_genre:
-                break;
+                break
             file_path = os.path.join(root, file)
             signal, sr = librosa.load(file_path, sr=SAMPLE_RATE)
 
@@ -58,10 +58,7 @@ def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048
 
         # save data to a json file
         with open(json_path, "w") as fp:
-            json.dump(data, fp, indent=2)
-
-                
-    
+            json.dump(data, fp, indent=4)
 
 if __name__ == '__main__':
     os.system('clear')
