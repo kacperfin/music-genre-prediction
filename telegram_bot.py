@@ -1,4 +1,3 @@
-from click import Command
 from telegram.ext import *
 from predict import *
 import os
@@ -8,7 +7,7 @@ from keys import *
 # Commands
 
 async def start_command(update, context):
-    text = 'Hey, my name is Mimo! Send me a song and I\'ll tell you the genre of it.'
+    text = 'Hey, my name is Mimo! Send me a song (mp3) and I\'ll tell you the genre of it' + emoji.emojize(' :guitar:')
     await update.message.reply_text(text)
 
 async def info_command(update, context):
@@ -17,7 +16,7 @@ async def info_command(update, context):
 
 def handle_response(text: str) -> str:
     # Response logic
-    response = 'Please send a valid mp3 or preferrably wav file.'
+    response = 'Please send a valid mp3 file.'
     return response
 
 async def handle_message(update, context):

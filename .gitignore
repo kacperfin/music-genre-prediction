@@ -160,7 +160,6 @@ songs/
 images/
 test.py
 data/
-features_to_predict_from.json
 keys.py
 data_predict/
 songs_predict/
