@@ -1,4 +1,3 @@
-import os
 import joblib
 from save_features_single_file import *
 import json
@@ -16,12 +15,11 @@ def predict(song_path: str, song_features_path):
     genres = data['genres']
 
     # Extract features from the songs
-    save_mfcc(song_path, song_features_path)
+    save_features(song_path, song_features_path)
     with open(song_features_path, "r") as fp:
         X = json.load(fp)
 
     X = np.array(X)
-    X = np.mean(X, axis=1)
     scaler = joblib.load(SCALER)
     X = scaler.transform(X)
 

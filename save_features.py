@@ -1,7 +1,8 @@
 import os
-import math
 import librosa
 import json
+import numpy as np
+from settings import *
 
 DATASET_PATH = "songs"
 SAMPLE_RATE = 22050
@@ -16,9 +17,8 @@ data = {
     "labels": []
 }
 
-def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048, hop_length: int=512, num_segments: int=5, song_limit_per_genre: int=None):
+def save_features(dataset_path: str, json_path: str, n_mfcc: int=NUM_OF_MFCC, n_fft: int=2048, hop_length: int=512, num_segments: int=1, song_limit_per_genre: int=None):
     num_samples_per_segment = SAMPLES_PER_TRACK / num_segments
-    expected_num_mfcc_vectors_per_segment = math.ceil(num_samples_per_segment / hop_length)
 
     # loop through all the genres
     for i, (root, dirs, files) in enumerate(os.walk(dataset_path)):
@@ -48,11 +48,13 @@ def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048
                                             n_fft=n_fft,
                                             hop_length=hop_length)
                 mfcc = mfcc.T
+                mfcc_mean = np.mean(mfcc, axis=0)
 
-                # check if there are enough mfcc vectors so that the data is coherent
-                if len(mfcc) == expected_num_mfcc_vectors_per_segment:
-                    data["mfcc"].append(mfcc.tolist())
-                    data["labels"].append(i-1)
+                tempo = librosa.feature.tempo(y=signal[start_sample_rate:finish_sample_rate],
+                                              sr=sr)
+
+                data["mfcc"].append(np.hstack((mfcc_mean, tempo)).tolist())
+                data["labels"].append(i-1)
 
             print(f"{file}")        
 
@@ -62,4 +64,4 @@ def save_mfcc(dataset_path: str, json_path: str, n_mfcc: int=13, n_fft: int=2048
 
 if __name__ == '__main__':
     os.system('clear')
-    save_mfcc(DATASET_PATH, JSON_PATH, num_segments=5)
+    save_features(DATASET_PATH, JSON_PATH, num_segments=5)

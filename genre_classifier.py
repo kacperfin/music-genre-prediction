@@ -25,30 +25,27 @@ def load_data(json_path):
 
 def main():
     X, y, genres = load_data(JSON_PATH)
-    X = np.mean(X, axis=1)
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-    X_train = X
-    y_train = y
-    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
-    # X_test = scaler.transform(X_test)
+    X_test = scaler.transform(X_test)
 
     joblib.dump(scaler, SCALER)
 
-    param_grid = {
-        'n_neighbors': [3, 5, 7, 9, 11, 13, 15],
+    param_grid_knn = {
+        'n_neighbors': list(range(3, 16, 2)),
         'weights': ['uniform', 'distance'],
         'metric': ['euclidean', 'manhattan', 'minkowski']
     }
 
-    grid_search = GridSearchCV(KNeighborsClassifier(), param_grid, cv=5, verbose=1, n_jobs=-1, scoring='accuracy')
+    grid_search = GridSearchCV(KNeighborsClassifier(), param_grid_knn, cv=5, verbose=1, n_jobs=-1, scoring='accuracy')
     grid_search.fit(X_train, y_train)
 
     model = grid_search.best_estimator_
-    # y_pred = model.predict(X_test)
+    y_pred = model.predict(X_test)
 
-    # print(classification_report(y_test, y_pred, target_names=genres))
+    print(classification_report(y_test, y_pred, target_names=genres))
 
     # Save the model
     joblib.dump(model, MODEL)

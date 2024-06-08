@@ -58,7 +58,7 @@ async def error(update, context):
 
 def main():
     print('Starting the bot...')
-    app = Application.builder().token(API_TOKEN).build()
+    app = Application.builder().token(API_TOKEN).read_timeout(30).write_timeout(30).build()
 
     # Commands
     app.add_handler(CommandHandler('start', start_command))
