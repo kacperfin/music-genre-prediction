@@ -26,13 +26,12 @@ def main():
     genres = data['genres']
 
     df = pd.DataFrame(mfcc)
-    df = df.iloc[:, :]
+    df = df.iloc[:, :-1]
+
     columns_names = [f'mfcc_mean_{x+1}' for x in range(NUM_OF_MFCC)]
-    columns_names.append('tempo')
+
     df.columns = columns_names
     df['genre'] = [genres[label] for label in labels]
-
-    print(df)
 
     for index, genre in enumerate(genres):
         df_genre = df[df.genre == genre] 
